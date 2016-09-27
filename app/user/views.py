@@ -5,7 +5,7 @@ from .manager import *
 from ..models import *
 
 
-@user_blueprint.route('/user', methods=['GET', 'POST', 'DELETE'])
+@user_blueprint.route('/account', methods=['GET', 'POST', 'DELETE'])
 def account():
     args = request.args
     form = request.form

@@ -3,6 +3,12 @@ from flask.ext.script import Manager
 from flask.ext.migrate import MigrateCommand, Migrate
 from flask.ext.sqlalchemy import SQLAlchemy
 
+try:
+    import MySQLdb
+except ImportError:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+
 app = Flask(__name__)
 db = SQLAlchemy()
 

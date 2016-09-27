@@ -5,7 +5,7 @@ from flask.ext.testing import TestCase
 from app import app
 from app.models import *
 
-user_account_url = '/user/user'
+user_account_url = '/user/account'
 user_session_url = '/user/session'
 board_article_url = '/board/article'
 board_comment_url = '/board/comment'
