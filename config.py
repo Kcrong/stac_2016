@@ -1,5 +1,10 @@
-# SQLALCHEMY_DATABASE_URI = 'mysql://root:1234@localhost:3306/stac_2016?charset=utf8'
-SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+from .debug import DEBUG
+
+if DEBUG:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+else:
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:1234@localhost:3306/stac_2016?charset=utf8'
+
 SECRET_KEY = 'development-key'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 MAX_CONTENT_LENGTH = 5 * 1024 * 1024
