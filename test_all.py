@@ -105,7 +105,7 @@ class ModelTestCase(BaseTestCase):
 
     @staticmethod
     def __write_comment(article, user):
-        c = Comment(test_comment_CONTENT, article, user)
+        c = Comment(test_comment_CONTENT, article, user, test_comment_SCORE)
         db.session.add(c)
         db.session.commit()
 
