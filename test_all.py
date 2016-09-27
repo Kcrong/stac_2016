@@ -1,3 +1,5 @@
+import unittest
+
 from flask.ext.testing import TestCase
 
 from app import app
@@ -129,3 +131,7 @@ class ModelTestCase(BaseTestCase):
 
         assert new_c.user == new_u
         assert new_c.article == new_a
+
+
+if __name__ == '__main__':
+    unittest.main()
