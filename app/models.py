@@ -1,6 +1,9 @@
 from app import db
 from datetime import datetime
+from geoalchemy2.types import Geometry
 
+
+#  http://stackoverflow.com/questions/4069595/flask-with-geoalchemy-sample-code
 
 def get_or_create(session, model, **kwargs):
     instance = session.query(model).filter_by(**kwargs).first()
@@ -11,6 +14,13 @@ def get_or_create(session, model, **kwargs):
         session.add(instance)
         session.commit()
         return instance
+
+
+class PlayGround(db.Model):
+    id = db.Column(db.INTEGER, primary_key=True)
+    title = db.Column(db.String(40), nullable=False)
+    location = db.Column(Geometry(geometry_type='POINT', srid=4326), nullable=False)
+    text_location = db.Column(db.TEXT, nullable=False)
 
 
 class ArticleImage(db.Model):
@@ -32,7 +42,7 @@ class Comment(db.Model):
     content = db.Column(db.TEXT, nullable=False)
     score = db.Column(db.INTEGER, nullable=False)
 
-    def __init__(self, content, article, writer, score):
+    def __init__(self, content, writer, score, article=None):
         self.content = content
         self.article = article
         self.user = writer
