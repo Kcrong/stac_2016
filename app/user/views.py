@@ -40,6 +40,7 @@ def account():
 def session():
     form = request.form
 
+    @logout_required
     def post():
         u = User.query.filter_by(userid=form['userid'], userpw=form['userpw']).first()
         if u is None:
