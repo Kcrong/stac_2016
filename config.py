@@ -1,6 +1,6 @@
-from .debug import DEBUG
+import debug
 
-if DEBUG:
+if debug.DEBUG:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
 else:
     SQLALCHEMY_DATABASE_URI = 'mysql://root:1234@localhost:3306/stac_2016?charset=utf8'
