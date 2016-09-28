@@ -84,6 +84,15 @@ class Article(db.Model):
     def __repr__(self):
         return "<Article %s>" % self.title
 
+    @property
+    def base_info(self):
+        return dict(
+            id=self.id,
+            user=self.user.nickname,
+            title=self.title,
+            content=self.content
+        )
+
 
 class User(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
