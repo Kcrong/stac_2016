@@ -75,26 +75,32 @@ class UserTestCase(BaseTestCase):
                                   ))
 
     def test_account(self):
-        self.assert200(self.__useradd())
+        self.assert200(self.__useradd(), "회원가입 오류")
 
         res = self.__userinfo()
         self.assert200(res)
-        self.assertEqual(res.json['userid'], test_user_ID)
-        self.assertEqual(res.json['nickname'], test_user_NICKNAME)
+        self.assertEqual(res.json['userid'], test_user_ID, "잘못된 회원 정보 열람 (아이디)")
+        self.assertEqual(res.json['nickname'], test_user_NICKNAME, "잘못된 회원 정보 열람 (닉네임)")
 
         # 중복유저 처리
         res = self.__useradd()
-        self.assertEqual(res.json['status'], 'duplicated')
-        self.assertIn(res.json['column'], ['userid', 'nickname'])
+        self.assertEqual(res.json['status'], 'duplicated', "상태메세지 이상")
+        self.assertIn(res.json['column'], ['userid', 'nickname'], "중복 칼럼 오류")
 
-        self.assertEquals(self.__userdel().json, dict(code=200, status='Success'))
+        self.__login()
+
+        self.assertEquals(self.__userdel().json, dict(code=200, status='Success'), "계정 삭제 실패")
+
+        self.assert401(self.__login(), "계정 삭제 후 로그인 제한 실패")
 
     def test_session(self):
         self.__useradd()
 
-        self.assertEquals(self.__login().json, dict(code=200, status='Success'))
+        self.assertEquals(self.__login().json, dict(code=200, status='Success'), "로그인 실패")
+        self.assert401(self.__login(), "로그인한 유저의 재로그인 제한 실패")
 
-        self.assertEquals(self.__logout().json, dict(code=200, status='Success'))
+        self.assertEquals(self.__logout().json, dict(code=200, status='Success'), "로그아웃 실패")
+        self.assert401(self.__logout(), "로그아웃한 유저의 재로그아웃 제한 실패")
 
 
 class ModelTestCase(BaseTestCase):
