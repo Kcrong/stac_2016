@@ -30,10 +30,12 @@ def account():
         else:
             return json_status()
 
+    @login_required
     def delete():
-        u = User.query.filter_by(userid=form['userid'], userpw=form['userpw']).first()
+        u = current_user()
         db.session.delete(u)
         db.session.commit()
+        logout_user()
 
         return json_status()
 
@@ -52,7 +54,7 @@ def session():
     def post():
         u = User.query.filter_by(userid=form['userid'], userpw=form['userpw']).first()
         if u is None:
-            return json_status(400, 'Wrong ID or PW')
+            return json_status(401, status='Wrong ID or PW')
         else:
             login_user(u.userid)
             return json_status()
