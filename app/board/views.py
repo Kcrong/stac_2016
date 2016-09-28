@@ -10,7 +10,12 @@ def comment():
 
     @login_required
     def post():
-        pass
+        a = Article.query.filter_by(id=form['article_id']).first()
+        c = Comment(form['content'], current_user(), form['score'], article=a)
+        db.session.add(c)
+        db.session.commit()
+
+        return json_status()
 
     return {
         'POST': post
