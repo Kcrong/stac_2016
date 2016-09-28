@@ -36,10 +36,11 @@ class Comment(db.Model):
     content = db.Column(db.TEXT, nullable=False)
     score = db.Column(db.INTEGER, nullable=False)
 
-    def __init__(self, content, writer, score, article=None):
+    def __init__(self, content, writer, score, article=None, playground=None):
         self.content = content
         self.article = article
         self.user = writer
+        self.playground = playground
 
         if score > 5:
             score = 5
@@ -52,10 +53,10 @@ class Comment(db.Model):
         return "<Comment %s>" % self.content
 
 
-class PlayGround(db.Model):
+class Playground(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     title = db.Column(db.String(40), nullable=False)
-    location = db.Column(Geometry(geometry_type='POINT', srid=4326), nullable=False)
+    # location = db.Column(Geometry(geometry_type='POINT', srid=4326), nullable=False)
     text_location = db.Column(db.TEXT, nullable=False)
     comments = db.relationship(Comment, backref='playground')
 
