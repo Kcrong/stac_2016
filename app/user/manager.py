@@ -28,7 +28,7 @@ def logout_required(func):
             if session['login'] is False:
                 return func(*args, **kwargs)
             else:
-                return json_status(401, "Login Required")
+                return json_status(401, "Logout Required")
 
     return check_logout
 
