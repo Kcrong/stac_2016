@@ -4,6 +4,8 @@ from . import user_blueprint
 from .manager import *
 from ..models import *
 
+from sqlalchemy.exc import IntegrityError
+
 
 @user_blueprint.route('/account', methods=['GET', 'POST', 'DELETE'])
 def account():
@@ -18,9 +20,15 @@ def account():
     def post():
         u = User(form['userid'], form['userpw'], form['nickname'])
         db.session.add(u)
-        db.session.commit()
 
-        return json_status()
+        try:
+            db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            dup = e.args[0].split('failed: ')[1].split('.')[1]
+            return json_status(400, status='duplicated', data={'column': dup})
+        else:
+            return json_status()
 
     def delete():
         u = User.query.filter_by(userid=form['userid'], userpw=form['userpw']).first()
