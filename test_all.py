@@ -76,14 +76,20 @@ class UserTestCase(BaseTestCase):
 
     def test_account(self):
         self.assert200(self.__useradd())
-        self.assert200(self.__userinfo())
 
-        self.assert200(self.__userdel())
+        res = self.__userinfo()
+        self.assert200(res)
+        self.assertEqual(res.json['userid'], test_user_ID)
+        self.assertEqual(res.json['nickname'], test_user_NICKNAME)
+
+        self.assertEquals(self.__userdel().json, dict(code=200, status='Success'))
 
     def test_session(self):
         self.__useradd()
-        self.assert200(self.__login())
-        self.assert200(self.__logout())
+
+        self.assertEquals(self.__login().json, dict(code=200, status='Success'))
+
+        self.assertEquals(self.__logout().json, dict(code=200, status='Success'))
 
 
 class ModelTestCase(BaseTestCase):
@@ -105,7 +111,7 @@ class ModelTestCase(BaseTestCase):
 
     @staticmethod
     def __write_comment(article, user):
-        c = Comment(test_comment_CONTENT, article, user, test_comment_SCORE)
+        c = Comment(test_comment_CONTENT, user, test_comment_SCORE, article=article)
         db.session.add(c)
         db.session.commit()
 
