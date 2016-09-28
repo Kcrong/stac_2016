@@ -82,6 +82,11 @@ class UserTestCase(BaseTestCase):
         self.assertEqual(res.json['userid'], test_user_ID)
         self.assertEqual(res.json['nickname'], test_user_NICKNAME)
 
+        # 중복유저 처리
+        res = self.__useradd()
+        self.assertEqual(res.json['status'], 'duplicated')
+        self.assertIn(res.json['column'], ['userid', 'nickname'])
+
         self.assertEquals(self.__userdel().json, dict(code=200, status='Success'))
 
     def test_session(self):
