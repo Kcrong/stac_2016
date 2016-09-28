@@ -111,20 +111,20 @@ class ViewTestCase(BaseTestCase):
     def test_session(self):
         self.__useradd()
 
-        self.assertEquals(self.__login().json, dict(code=200, status='Success'), "로그인 실패")
+        self.assertEqual(self.__login().json, dict(code=200, status='Success'), "로그인 실패")
         self.assert401(self.__login(), "로그인한 유저의 재로그인 제한 실패")
 
-        self.assertEquals(self.__logout().json, dict(code=200, status='Success'), "로그아웃 실패")
+        self.assertEqual(self.__logout().json, dict(code=200, status='Success'), "로그아웃 실패")
         self.assert401(self.__logout(), "로그아웃한 유저의 재로그아웃 제한 실패")
 
     def test_board(self):
         a = ModelTestCase.write_article(ModelTestCase.useradd())
 
-        self.assertEquals(self.__login().json, dict(code=200, status='Success'), "로그인 실패")
+        self.assertEqual(self.__login().json, dict(code=200, status='Success'), "로그인 실패")
 
-        self.assertEquals(self.__write_article().json, dict(code=200, status='Success'), "게시물 작성 실패")
+        self.assertEqual(self.__write_article().json, dict(code=200, status='Success'), "게시물 작성 실패")
 
-        self.assertEquals(self.__write_comment(a).json, dict(code=200, status='Success'), "댓글 작성 실패")
+        self.assertEqual(self.__write_comment(a).json, dict(code=200, status='Success'), "댓글 작성 실패")
 
 
 class ModelTestCase(BaseTestCase):
