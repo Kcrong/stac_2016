@@ -42,6 +42,8 @@ class Comment(db.Model):
         self.user = writer
         self.playground = playground
 
+        score = int(score)
+
         if score > 5:
             score = 5
         elif score < 1:
