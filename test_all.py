@@ -39,7 +39,7 @@ class BaseTestCase(TestCase):
         db.drop_all()
 
 
-class UserTestCase(BaseTestCase):
+class ViewTestCase(BaseTestCase):
     def __userinfo(self):
         return self.client.get(user_account_url,
                                query_string=dict(
@@ -74,6 +74,21 @@ class UserTestCase(BaseTestCase):
                                       userid=test_user_ID
                                   ))
 
+    def __write_article(self):
+        return self.client.post(board_article_url,
+                                data=dict(
+                                    title=test_article_TITLE,
+                                    content=test_article_CONTENT
+                                ))
+
+    def __write_comment(self, article):
+        return self.client.post(board_comment_url,
+                                data=dict(
+                                    article_id=article.id,
+                                    content=test_comment_CONTENT,
+                                    score=test_comment_SCORE
+                                ))
+
     def test_account(self):
         self.assert200(self.__useradd(), "회원가입 오류")
 
@@ -102,10 +117,19 @@ class UserTestCase(BaseTestCase):
         self.assertEquals(self.__logout().json, dict(code=200, status='Success'), "로그아웃 실패")
         self.assert401(self.__logout(), "로그아웃한 유저의 재로그아웃 제한 실패")
 
+    def test_board(self):
+        a = ModelTestCase.write_article(ModelTestCase.useradd())
+
+        self.assertEquals(self.__login().json, dict(code=200, status='Success'), "로그인 실패")
+
+        self.assertEquals(self.__write_article().json, dict(code=200, status='Success'), "게시물 작성 실패")
+
+        self.assertEquals(self.__write_comment(a).json, dict(code=200, status='Success'), "댓글 작성 실패")
+
 
 class ModelTestCase(BaseTestCase):
     @staticmethod
-    def __useradd():
+    def useradd():
         u = User(test_user_ID, test_user_PASSWORD, test_user_NICKNAME)
         db.session.add(u)
         db.session.commit()
@@ -113,7 +137,7 @@ class ModelTestCase(BaseTestCase):
         return u
 
     @staticmethod
-    def __write_article(user):
+    def write_article(user):
         a = Article(test_article_TITLE, test_comment_CONTENT, user)
         db.session.add(a)
         db.session.commit()
@@ -121,7 +145,7 @@ class ModelTestCase(BaseTestCase):
         return a
 
     @staticmethod
-    def __write_comment(article, user):
+    def write_comment(article, user):
         c = Comment(test_comment_CONTENT, user, test_comment_SCORE, article=article)
         db.session.add(c)
         db.session.commit()
@@ -129,9 +153,9 @@ class ModelTestCase(BaseTestCase):
         return c
 
     def test_user_model(self):
-        u = self.__useradd()
-        a = self.__write_article(u)
-        c = self.__write_comment(a, u)
+        u = self.useradd()
+        a = self.write_article(u)
+        c = self.write_comment(a, u)
 
         assert u in db.session
         assert a in db.session
