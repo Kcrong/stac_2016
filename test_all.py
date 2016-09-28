@@ -104,7 +104,7 @@ class ViewTestCase(BaseTestCase):
 
         self.__login()
 
-        self.assertEquals(self.__userdel().json, dict(code=200, status='Success'), "계정 삭제 실패")
+        self.assertEqual(self.__userdel().json, dict(code=200, status='Success'), "계정 삭제 실패")
 
         self.assert401(self.__login(), "계정 삭제 후 로그인 제한 실패")
 
