@@ -21,6 +21,7 @@ class PlayGround(db.Model):
     title = db.Column(db.String(40), nullable=False)
     location = db.Column(Geometry(geometry_type='POINT', srid=4326), nullable=False)
     text_location = db.Column(db.TEXT, nullable=False)
+    comments = db.relationship('Comment', backref='playground')
 
 
 class ArticleImage(db.Model):
@@ -39,6 +40,7 @@ class Comment(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
     article_id = db.Column(db.INTEGER, db.ForeignKey('article.id'))
+    playground_id = db.Column(db.INTEGER, db.ForeignKey('playground.id'))
     content = db.Column(db.TEXT, nullable=False)
     score = db.Column(db.INTEGER, nullable=False)
 
