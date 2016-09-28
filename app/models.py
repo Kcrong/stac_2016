@@ -16,14 +16,6 @@ def get_or_create(session, model, **kwargs):
         return instance
 
 
-class PlayGround(db.Model):
-    id = db.Column(db.INTEGER, primary_key=True)
-    title = db.Column(db.String(40), nullable=False)
-    location = db.Column(Geometry(geometry_type='POINT', srid=4326), nullable=False)
-    text_location = db.Column(db.TEXT, nullable=False)
-    comments = db.relationship('Comment', backref='playground')
-
-
 class ArticleImage(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     article_id = db.Column(db.INTEGER, db.ForeignKey('article.id'))
@@ -58,6 +50,22 @@ class Comment(db.Model):
 
     def __repr__(self):
         return "<Comment %s>" % self.content
+
+
+class PlayGround(db.Model):
+    id = db.Column(db.INTEGER, primary_key=True)
+    title = db.Column(db.String(40), nullable=False)
+    location = db.Column(Geometry(geometry_type='POINT', srid=4326), nullable=False)
+    text_location = db.Column(db.TEXT, nullable=False)
+    comments = db.relationship(Comment, backref='playground')
+
+    def __init__(self, title, location):
+        self.title = title
+        self.text_location = location
+        self.location = self.text2
+
+    def __repr__(self):
+        return "<Playground %s>" % self.title
 
 
 class Article(db.Model):
