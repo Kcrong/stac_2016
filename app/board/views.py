@@ -1,6 +1,7 @@
 from . import board_blueprint
 from flask import request
 from ..user.manager import *
+from ..models import *
 
 
 @board_blueprint.route('/comment', methods=['GET', 'POST'])
@@ -22,10 +23,16 @@ def article():
     form = request.form
 
     def get():
-        pass
+        a = Article.query.filter_by(id=args['id']).first()
+        return json_status(data=a.base_info)
 
+    @login_required
     def post():
-        pass
+        a = Article(form['title'], form['content'], current_user())
+        db.session.add(a)
+        db.session.commit()
+
+        return json_status()
 
     return {
         'GET': get,
