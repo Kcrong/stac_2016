@@ -137,7 +137,7 @@ class ViewTestCase(BaseTestCase):
         self.assertEqual(self.__write_comment(a).json, dict(code=200, status='Success'), "댓글 작성 실패")
 
     def test_image(self):
-        self.upload_image()
+        self.assertEqual(self.__upload_image().json, dict(code=200, status='Success'), "프로필 이미지 업로드 실패")
 
 
 class ModelTestCase(BaseTestCase):
