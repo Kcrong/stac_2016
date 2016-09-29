@@ -86,7 +86,7 @@ class Article(db.Model):
         self.user = writer
 
     def __repr__(self):
-    모듈 임포트를 위한 경로 생성 코드 추가    return "<Article %s>" % self.title
+        return "<Article %s>" % self.title
 
     @property
     def base_info(self):
