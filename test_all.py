@@ -91,7 +91,7 @@ class ViewTestCase(BaseTestCase):
                                     score=test_comment_SCORE
                                 ))
 
-    def upload_image(self):
+    def __upload_image(self):
         with open('tests/image.png', 'rb') as fp:
             test_imagedata = fp.read()
 
