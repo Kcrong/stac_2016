@@ -17,10 +17,12 @@ def create_app():
     from .main import main_blueprint
     from .user import user_blueprint
     from .board import board_blueprint
+    from .files import file_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(user_blueprint, url_prefix='/user')
     app.register_blueprint(board_blueprint, url_prefix='/board')
+    app.register_blueprint(file_blueprint, url_prefix='/file')
 
     app.config.from_pyfile('../config.py')
 
