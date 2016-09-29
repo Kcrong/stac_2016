@@ -1,3 +1,4 @@
+import os
 import debug
 import random
 import string
@@ -17,3 +18,5 @@ SQLALCHEMY_TRACK_MODIFICATIONS = True
 MAX_CONTENT_LENGTH = 5 * 1024 * 1024
 TRAP_BAD_REQUEST_ERRORS = True
 SQLALCHEMY_POOL_RECYCLE = 3600
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+PROFILE_IMAGE_PATH = os.path.join(PROJECT_PATH, 'app', 'static')
