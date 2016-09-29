@@ -1,7 +1,8 @@
+import os
 from app import db
 from datetime import datetime
 from geoalchemy2.types import Geometry
-from config import randomkey
+from config import randomkey, PROFILE_IMAGE_PATH
 
 
 #  http://stackoverflow.com/questions/4069595/flask-with-geoalchemy-sample-code
@@ -85,7 +86,7 @@ class Article(db.Model):
         self.user = writer
 
     def __repr__(self):
-        return "<Article %s>" % self.title
+    모듈 임포트를 위한 경로 생성 코드 추가    return "<Article %s>" % self.title
 
     @property
     def base_info(self):
@@ -127,6 +128,8 @@ class User(db.Model):
         )
 
     def add_profile(self, image):
-        random_filename = randomkey(60)
-        image.save('../static/' + random_filename)
+        filetype = image.filename.split('.')[-1]
+        random_filename = randomkey(60) + '.' + filetype
+
+        image.save(os.path.join(PROFILE_IMAGE_PATH, random_filename))
         self.image = random_filename
