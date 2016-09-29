@@ -1,6 +1,7 @@
 from app import db
 from datetime import datetime
 from geoalchemy2.types import Geometry
+from config import randomkey
 
 
 #  http://stackoverflow.com/questions/4069595/flask-with-geoalchemy-sample-code
@@ -101,7 +102,7 @@ class User(db.Model):
     userid = db.Column(db.String(30), unique=True, nullable=False)
     userpw = db.Column(db.String(30), nullable=False)
     nickname = db.Column(db.String(20), nullable=False, unique=True)
-    image = db.Column(db.String(30), unique=True)
+    image = db.Column(db.String(60), unique=True)
     created_at = db.Column(db.DATETIME, default=datetime.now(), nullable=False)
     updated_at = db.Column(db.DATETIME, default=datetime.now(), nullable=False, onupdate=datetime.now())
     articles = db.relationship(Article, backref='user')
@@ -124,3 +125,9 @@ class User(db.Model):
             created=self.created_at,
             updated=self.updated_at
         )
+
+    def add_profile(self, image):
+        random_filename = randomkey(60)
+        image.save('../static/' + random_filename)
+        self.image = random_filename
+        db.session.commit()
