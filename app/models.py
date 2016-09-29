@@ -130,4 +130,3 @@ class User(db.Model):
         random_filename = randomkey(60)
         image.save('../static/' + random_filename)
         self.image = random_filename
-        db.session.commit()
