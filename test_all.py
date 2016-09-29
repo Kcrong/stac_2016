@@ -4,6 +4,7 @@ from flask.ext.testing import TestCase
 
 from app import app
 from app.models import *
+from io import BytesIO
 
 user_account_url = '/user/account'
 user_session_url = '/user/session'
@@ -91,13 +92,12 @@ class ViewTestCase(BaseTestCase):
                                 ))
 
     def upload_image(self):
-        with open(TEST_IMAGE, 'rb') as fp:
+        with open('tests/image.png', 'rb') as fp:
             test_imagedata = fp.read()
 
-        return self.client.post(url,
-                                data=dict(file=(BytesIO(test_imagedata), TEST_IMAGENAME)),
+        return self.client.post(file_image_url,
+                                data=dict(file=(BytesIO(test_imagedata), "profile")),
                                 content_type='multipart/form-data')
-
 
     def test_account(self):
         self.assert200(self.__useradd(), "회원가입 오류")
@@ -135,6 +135,9 @@ class ViewTestCase(BaseTestCase):
         self.assertEqual(self.__write_article().json, dict(code=200, status='Success'), "게시물 작성 실패")
 
         self.assertEqual(self.__write_comment(a).json, dict(code=200, status='Success'), "댓글 작성 실패")
+
+    def test_image(self):
+        self.upload_image()
 
 
 class ModelTestCase(BaseTestCase):
