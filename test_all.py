@@ -96,8 +96,14 @@ class ViewTestCase(BaseTestCase):
             test_imagedata = fp.read()
 
         return self.client.post(file_image_url,
-                                data=dict(file=(BytesIO(test_imagedata), "profile")),
+                                data=dict(file=(BytesIO(test_imagedata), "profile.png")),
                                 content_type='multipart/form-data')
+
+    def __view_image(self):
+        return self.client.get(file_image_url,
+                               query_string=dict(
+                                   userid=test_user_ID
+                               ))
 
     def test_account(self):
         self.assert200(self.__useradd(), "회원가입 오류")
@@ -137,7 +143,15 @@ class ViewTestCase(BaseTestCase):
         self.assertEqual(self.__write_comment(a).json, dict(code=200, status='Success'), "댓글 작성 실패")
 
     def test_image(self):
-        self.assertEqual(self.__upload_image().json, dict(code=200, status='Success'), "프로필 이미지 업로드 실패")
+        self.__useradd()
+        self.__login()
+
+        res = self.__upload_image()
+        self.assert200(res)
+        self.assertNotEqual(res.json['image'], None, "프로필 이미지 업로드 실패")
+        self.assertEqual(res.json['status'], 'Success', "프로필 이미지 업로드 실패")
+
+        self.assert200(self.__view_image())
 
 
 class ModelTestCase(BaseTestCase):
