@@ -9,6 +9,7 @@ user_account_url = '/user/account'
 user_session_url = '/user/session'
 board_article_url = '/board/article'
 board_comment_url = '/board/comment'
+file_image_url = '/file/image'
 
 test_user_ID = 'testid'
 test_user_PASSWORD = 'userpw'
@@ -88,6 +89,15 @@ class ViewTestCase(BaseTestCase):
                                     content=test_comment_CONTENT,
                                     score=test_comment_SCORE
                                 ))
+
+    def upload_image(self):
+        with open(TEST_IMAGE, 'rb') as fp:
+            test_imagedata = fp.read()
+
+        return self.client.post(url,
+                                data=dict(file=(BytesIO(test_imagedata), TEST_IMAGENAME)),
+                                content_type='multipart/form-data')
+
 
     def test_account(self):
         self.assert200(self.__useradd(), "회원가입 오류")
