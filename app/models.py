@@ -1,7 +1,7 @@
 import os
-from app import db
 from datetime import datetime
-from geoalchemy2.types import Geometry
+
+from app import db
 from config import randomkey, PROFILE_IMAGE_PATH
 
 
